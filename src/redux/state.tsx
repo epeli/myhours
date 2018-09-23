@@ -1,8 +1,19 @@
-import {Branded} from "../utils";
+import * as datefns from "date-fns/esm";
+import {values} from "lodash-es";
+
+import {Branded, notEmpty} from "../utils";
 
 export type ProjectID = Branded<"project", string>;
 export type EntryDate = Branded<"entry-date", string>;
 export type EntryID = Branded<"entry", string>;
+
+export function createEntryDate(date: Date): EntryDate {
+    return datefns.format(date, "YYYY-MM-DD") as EntryDate;
+}
+
+export function entryDateAsDate(date: EntryDate): Date {
+    return datefns.parse(date as string, "YYYY-MM-DD", new Date());
+}
 
 export interface Project {
     id: ProjectID;
@@ -13,17 +24,18 @@ export interface Entry {
     id: EntryID;
     date: EntryDate;
     project: ProjectID;
+    comment: string;
     duration?: number;
     interval?: {start: number; end: number};
 }
 
 export interface State {
     projects: {
-        [key: string]: Project | undefined;
+        [projectId: string]: Project | undefined;
     };
 
     entries: {
-        [key: string]: Entry | undefined;
+        [entryId: string]: Entry | undefined;
     };
 }
 
@@ -38,7 +50,22 @@ export const initialState: State = {
             name: "Bar",
         },
     },
-    entries: {},
+    entries: {
+        boo: {
+            id: "boo" as EntryID,
+            date: createEntryDate(new Date()),
+            project: "bar" as ProjectID,
+            comment: "testi",
+            duration: 2.4,
+        },
+        bar: {
+            id: "bar" as EntryID,
+            date: createEntryDate(new Date()),
+            project: "bar" as ProjectID,
+            comment: "bar juttu",
+            duration: 2.4,
+        },
+    },
 };
 
 export class Selectors {
@@ -46,5 +73,19 @@ export class Selectors {
 
     constructor(state: State) {
         this.state = state;
+    }
+
+    getEntryIDs(date: EntryDate): EntryID[] {
+        return this.getEntries(date).map(entry => entry.id);
+    }
+
+    getEntry(id: EntryID) {
+        return this.state.entries[id];
+    }
+
+    getEntries(date: EntryDate): Entry[] {
+        return values(this.state.entries)
+            .filter(notEmpty)
+            .filter(entry => entry.date === date);
     }
 }

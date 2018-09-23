@@ -14,16 +14,20 @@
         "@babel/preset-typescript": "^7.1.0",
         "@epeli/redux-stack": "^0.7.1",
         "@material-ui/core": "^3.1.0",
+        "@types/lodash-es": "^4.17.1",
         "@types/react": "^16.4.14",
         "@types/react-dom": "^16.0.7",
+        "@types/react-redux": "^6.0.9",
         "@types/react-router-dom": "^4.3.1",
         "babel-loader": "^8.0.2",
         "babel-plugin-emotion": "^9.2.10",
         "css-loader": "^1.0.0",
+        "date-fns": "^2.0.0-alpha.18",
         "emotion": "^9.2.10",
         "graphql": "^14.0.2",
         "immer": "^1.7.2",
         "jake": "^8.0.18",
+        "lodash-es": "^4.17.11",
         "prettier": "^1.14.3",
         "react": "^16.5.2",
         "react-dom": "^16.5.2",
@@ -39,7 +43,6 @@
         "webpack": "^4.19.1",
         "webpack-bundle-analyzer": "^3.0.2",
         "webpack-cli": "^3.1.1",
-        "webpack-dev-server": "^3.1.8",
-        "@types/react-redux": "^6.0.9"
+        "webpack-dev-server": "^3.1.8"
     }
 }
