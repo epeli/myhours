@@ -15,6 +15,10 @@ export function entryDateAsDate(date: EntryDate): Date {
     return datefns.parse(date as string, "YYYY-MM-DD", new Date());
 }
 
+export function generateEntryId(): EntryID {
+    return String(Math.random()) as EntryID;
+}
+
 export interface Project {
     id: ProjectID;
     name: string;
@@ -23,7 +27,7 @@ export interface Project {
 export interface Entry {
     id: EntryID;
     date: EntryDate;
-    project: ProjectID;
+    projectID: ProjectID;
     comment: string;
     duration?: number;
     interval?: {start: number; end: number};
@@ -54,14 +58,14 @@ export const initialState: State = {
         boo: {
             id: "boo" as EntryID,
             date: createEntryDate(new Date()),
-            project: "bar" as ProjectID,
+            projectID: "bar" as ProjectID,
             comment: "testi",
             duration: 2.4,
         },
         bar: {
             id: "bar" as EntryID,
             date: createEntryDate(new Date()),
-            project: "bar" as ProjectID,
+            projectID: "bar" as ProjectID,
             comment: "bar juttu",
             duration: 2.4,
         },
@@ -87,5 +91,9 @@ export class Selectors {
         return values(this.state.entries)
             .filter(notEmpty)
             .filter(entry => entry.date === date);
+    }
+
+    getProjects() {
+        return values(this.state.projects).filter(notEmpty);
     }
 }

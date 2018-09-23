@@ -19,7 +19,7 @@ const Entry = (props: {id: EntryID}) => (
                 <Card>
                     <CardContent>
                         <Typography variant="headline" component="h2">
-                            {entry.id}
+                            {entry.projectID}
                         </Typography>
                         <Typography component="p">{entry.comment}</Typography>
                     </CardContent>

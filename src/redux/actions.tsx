@@ -7,8 +7,8 @@ export const SimpleActions = createSimpleActions(initialState, {
         return draftState;
     },
 
-    addEntry(draftState, action: {entry: Entry}) {
-        draftState.entries[action.entry.id] = action.entry;
+    addEntry(draftState, action: Entry) {
+        draftState.entries[action.id] = action;
         return draftState;
     },
 });
