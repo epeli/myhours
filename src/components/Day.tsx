@@ -1,22 +1,24 @@
 import React from "react";
 
-import {createEntryDate} from "../redux/state";
+import {EntryDate} from "../redux/state";
 import {createMyHoursComponent} from "../redux/store";
 
+import AddEntry from "./AddEntry";
 import Entry from "./Entry";
 
 const EntriesConnect = createMyHoursComponent({
-    mapState: (selectors, props: {date: Date}) => ({
-        entryIDs: selectors.getEntryIDs(createEntryDate(props.date)),
+    mapState: (selectors, props: {date: EntryDate}) => ({
+        entryIDs: selectors.getEntryIDs(props.date),
     }),
 });
 
-const Day = () => (
+const Day = (props: {date: EntryDate}) => (
     <div>
         <EntriesConnect
-            date={new Date()}
+            date={props.date}
             render={data => data.entryIDs.map(id => <Entry key={id} id={id} />)}
         />
+        <AddEntry date={props.date} />
     </div>
 );
 
