@@ -8,11 +8,11 @@ export type EntryDate = Branded<"entry-date", string>;
 export type EntryID = Branded<"entry", string>;
 
 export function createEntryDate(date: Date): EntryDate {
-    return datefns.format(date, "YYYY-MM-DD") as EntryDate;
+    return datefns.format(date, "YYYY-MM-dd") as EntryDate;
 }
 
 export function entryDateAsDate(date: EntryDate): Date {
-    return datefns.parse(date as string, "YYYY-MM-DD", new Date());
+    return datefns.parse(date as string, "YYYY-MM-dd", new Date());
 }
 
 export function generateEntryId(): EntryID {
