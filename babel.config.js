@@ -1,6 +1,8 @@
 // XXX: There must be a better way
 const IS_JEST = process.argv.join("").includes("jest");
 
+console.log("bable NODE_ENV", process.env.NODE_ENV);
+
 function addNodeSupport(config) {
     // only for es imports
     config.presets.push([
@@ -49,6 +51,7 @@ let CONFIG = {
     presets: ["@babel/preset-typescript", "@babel/preset-react"],
     plugins: [
         "@babel/plugin-proposal-class-properties",
+        "@babel/plugin-syntax-dynamic-import",
         ["emotion", EMOTION_CONFIG],
         // "@babel/plugin-syntax-dynamic-import",
     ],

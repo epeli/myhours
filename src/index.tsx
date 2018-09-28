@@ -1,21 +1,31 @@
 import React from "react";
 import ReactDom from "react-dom";
+import {hot} from "react-hot-loader";
 import {Provider} from "react-redux";
 import {HashRouter as Router} from "react-router-dom";
 
 import Main from "./components/Main";
 import {createMyHoursStore} from "./redux/store";
 
+const store = createMyHoursStore();
+
 const Root = () => (
     <Router>
-        <Provider store={createMyHoursStore()}>
+        <Provider store={store}>
             <Main />
         </Provider>
     </Router>
 );
 
 const el = document.getElementById("root");
+console.log(3);
+
+console.log(module);
+
+const HotRoot = hot(module)(Root);
 
 if (el) {
-    ReactDom.render(<Root />, el);
+    ReactDom.render(module.hot ? <HotRoot /> : <Root />, el);
+} else {
+    throw new Error("cannot find div#root");
 }

@@ -22,6 +22,7 @@ const Container = styled(View)({
 
 const Day = (props: {date: EntryDate}) => (
     <Container>
+        hei 9
         <EntriesConnect
             date={props.date}
             render={data => data.entryIDs.map(id => <Entry key={id} id={id} />)}
