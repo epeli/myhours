@@ -7,9 +7,11 @@ function wrapQuotes(globs) {
     return globs.map(s => `"${s}"`);
 }
 
-task("js-server", sh`webpack-dev-server --mode development `);
+task("js-server", sh`webpack-dev-server --mode development`);
 
-task("js", sh`NODE_ENV=production webpack --mode production`);
+task("js-server-hot", sh`webpack-dev-server --mode development --hot`);
+
+task("js", sh`webpack --mode production`);
 
 task(
     "js-analyze",

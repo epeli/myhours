@@ -1,8 +1,5 @@
-const createWebpackConfig = require("./webpack-config");
+const {createWebpackConfig} = require("@epeli/webpack-config");
 
 module.exports = createWebpackConfig({
-    htmlPlugin: {
-        template: "index.tmpl.html",
-        title: "sadff",
-    },
+    template: "src/index.html.tmpl",
 });

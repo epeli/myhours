@@ -18,9 +18,8 @@ const Root = () => (
 );
 
 const el = document.getElementById("root");
-console.log(3);
 
-console.log(module);
+declare const module: any;
 
 const HotRoot = hot(module)(Root);
 
