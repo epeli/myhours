@@ -28,8 +28,8 @@ export interface Entry {
     id: EntryID;
     projectID: ProjectID;
     comment: string;
-    duration?: number;
-    interval?: {start: number; end: number};
+    start: number;
+    end?: number;
 }
 
 export interface Day {
@@ -113,5 +113,15 @@ export class Selectors {
 
     getProjects() {
         return values(this.state.projects).filter(notEmpty);
+    }
+
+    getProject(id: ProjectID) {
+        const project = this.state.projects[id];
+
+        if (!project) {
+            throw new Error("Unknown project ID: " + id);
+        }
+
+        return project;
     }
 }

@@ -48,14 +48,6 @@ class AddEntry extends React.Component<{day: DayID}, typeof initialState> {
                     }}
                 />
                 <Input
-                    placeholder="Kesto"
-                    value={this.state.duration}
-                    type="number"
-                    onChange={e => {
-                        this.setState({duration: Number(e.target.value)});
-                    }}
-                />
-                <Input
                     placeholder="Comment"
                     value={this.state.comment}
                     onChange={e => {
@@ -76,7 +68,7 @@ class AddEntry extends React.Component<{day: DayID}, typeof initialState> {
                                 id: generateEntryId(),
                                 projectID: this.state.project.id,
                                 comment: this.state.comment,
-                                duration: this.state.duration,
+                                start: Date.now(),
                             },
                         });
                     }}
