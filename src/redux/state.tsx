@@ -103,11 +103,24 @@ export class Selectors {
 
     getEntry(date: DayID, id: EntryID): Entry | undefined {
         const day = this.state.days[date];
+
         if (!day) {
             return;
         }
 
         return day.entries.find(entry => entry.id == id);
+    }
+
+    getNextEntry(date: DayID, id: EntryID): Entry | undefined {
+        const day = this.state.days[date];
+
+        if (!day) {
+            return;
+        }
+
+        const entryIndex = day.entries.findIndex(entry => entry.id == id);
+
+        return day.entries[entryIndex + 1];
     }
 
     getEntries(date: DayID): Entry[] {

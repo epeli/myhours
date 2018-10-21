@@ -8,15 +8,19 @@ import React from "react";
 import styled from "react-emotion";
 import {MappedActions} from "redux-render-prop";
 
-import {SimpleActions} from "../redux/actions";
 import {DayID, Entry, EntryID, ProjectID} from "../redux/state";
 import {createMyHoursConnect} from "../redux/store";
 
 import {View} from "./core";
 
 const EntryConnect = createMyHoursConnect({
-    mapState: (selectors, props: {day: DayID; id: EntryID}) =>
-        selectors.getEntry(props.day, props.id) || null,
+    mapState: (selectors, props: {day: DayID; id: EntryID}) => {
+        const nextEntry = selectors.getNextEntry(props.day, props.id);
+        return {
+            entry: selectors.getEntry(props.day, props.id) || null,
+            isNextRunning: nextEntry ? !nextEntry.end : false,
+        };
+    },
     mapActions: actions => ({
         setEntryEnd: actions.setEntryEnd,
     }),
@@ -59,6 +63,7 @@ const Duration = (props: {duration: number}) => {
 interface Props {
     day: DayID;
     entry: Entry;
+    isNextRunning: boolean;
     setEntryEnd: MappedActions<typeof EntryConnect>["setEntryEnd"];
 }
 
@@ -73,6 +78,12 @@ class EntryClass extends React.Component<Props, State> {
     }
 
     handleSlider = (e: unknown, value: number) => {
+        const endTime = this.props.entry.start + value * 1000 * 60;
+
+        if (this.props.isNextRunning && endTime > Date.now()) {
+            return;
+        }
+
         this.setState({sliderValue: value});
     };
 
@@ -177,11 +188,12 @@ const EntryWrap = (props: {day: DayID; id: EntryID}) => (
     <EntryConnect
         day={props.day}
         id={props.id}
-        render={(entry, actions) =>
-            entry ? (
+        render={(data, actions) =>
+            data.entry ? (
                 <EntryClass
                     day={props.day}
-                    entry={entry}
+                    entry={data.entry}
+                    isNextRunning={data.isNextRunning}
                     setEntryEnd={actions.setEntryEnd}
                 />
             ) : (
