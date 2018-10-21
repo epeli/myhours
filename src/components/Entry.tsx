@@ -20,7 +20,7 @@ const EntryConnect = createMyHoursConnect({
     mapState: (selectors, props: {day: DayID; id: EntryID}) =>
         selectors.getEntry(props.day, props.id) || null,
     mapActions: actions => ({
-        setEntryValues: actions.setEntryValues,
+        setEntryEnd: actions.setEntryEnd,
     }),
 });
 
@@ -61,12 +61,11 @@ const Duration = (props: {duration: number}) => {
 interface Props {
     day: DayID;
     entry: Entry;
-    setEntryValues: MappedActions<typeof EntryConnect>["setEntryValues"];
+    setEntryEnd: MappedActions<typeof EntryConnect>["setEntryEnd"];
 }
 
 interface State {
     sliderValue: number | null;
-    // setEntryValues: typeof SimpleActions["setEntryValues"];
 }
 
 class EntryClass extends React.Component<Props, State> {
@@ -84,25 +83,20 @@ class EntryClass extends React.Component<Props, State> {
             return;
         }
 
-        this.props.setEntryValues({
+        this.props.setEntryEnd({
             day: this.props.day,
             entryID: this.props.entry.id,
-            values: {
-                end:
-                    this.props.entry.start + this.state.sliderValue * 60 * 1000,
-            },
+            end: this.props.entry.start + this.state.sliderValue * 60 * 1000,
         });
 
         this.setState({sliderValue: null});
     };
 
     handleStop = () => {
-        this.props.setEntryValues({
+        this.props.setEntryEnd({
             day: this.props.day,
             entryID: this.props.entry.id,
-            values: {
-                end: Date.now(),
-            },
+            end: Date.now(),
         });
     };
 
@@ -190,7 +184,7 @@ const EntryWrap = (props: {day: DayID; id: EntryID}) => (
                 <EntryClass
                     day={props.day}
                     entry={entry}
-                    setEntryValues={actions.setEntryValues}
+                    setEntryEnd={actions.setEntryEnd}
                 />
             ) : (
                 "not found: " + props.id
