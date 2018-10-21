@@ -1,5 +1,6 @@
 import {createSimpleActions} from "@epeli/redux-stack";
 import {Omit, strictAssign} from "@epeli/utils";
+import {last} from "lodash-es";
 
 import {DayID, Entry, EntryID, initialState} from "./state";
 
@@ -9,6 +10,7 @@ export const SimpleActions = createSimpleActions(initialState, {
     },
 
     addEntry(draftState, action: {day: DayID; entry: Entry}) {
+        let entry = action.entry;
         const day = draftState.days[action.day];
 
         if (!day) {
@@ -16,7 +18,17 @@ export const SimpleActions = createSimpleActions(initialState, {
             return draftState;
         }
 
-        day.entries.push(action.entry);
+        const prevEntry = last(day.entries);
+
+        if (prevEntry) {
+            if (prevEntry.end) {
+                entry = {...entry, start: prevEntry.end};
+            } else {
+                prevEntry.end = entry.start;
+            }
+        }
+
+        day.entries.push(entry);
 
         return draftState;
     },

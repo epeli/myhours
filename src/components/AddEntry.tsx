@@ -32,10 +32,7 @@ class AddEntry extends React.Component<{day: DayID}, typeof initialState> {
     }
 
     canAdd() {
-        if (!this.state.project) {
-            return false;
-        }
-        return this.state.duration > 0;
+        return Boolean(this.state.project);
     }
 
     renderInputs(_: unknown, actions: MappedActions<typeof EntryConnect>) {
