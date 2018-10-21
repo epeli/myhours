@@ -116,7 +116,16 @@ function getSuggestions(value: string) {
 function IntegrationDownshift(props: any) {
     return (
         <div>
-            <Downshift id="downshift-simple">
+            <Downshift
+                onSelect={(e, state) => {
+                    console.log("select", e);
+                }}
+                onStateChange={(changes, state) => {
+                    if (!state.highlightedIndex) {
+                        state.setHighlightedIndex(0);
+                    }
+                }}
+            >
                 {ds => (
                     <div>
                         {renderInput({
