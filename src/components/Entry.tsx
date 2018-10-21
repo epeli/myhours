@@ -112,7 +112,7 @@ class EntryClass extends React.Component<Props, State> {
                 </Typography>
 
                 <SliderContainer>
-                    {this.getSliderValue()} min
+                    <Typography>{this.getSliderValue()} min</Typography>
                     <Slider
                         min={0}
                         max={60 * 5}
