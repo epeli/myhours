@@ -21,7 +21,7 @@ const ProjectsConnect = createMyHoursConnect({
     mapState: selectors => selectors.state.projects,
 });
 
-const initialState = {searchString: ""};
+const initialState = {inputValue: "", maybeCreateProject: ""};
 
 class AddEntry extends React.Component<{day: DayID}, typeof initialState> {
     state = initialState;
@@ -34,8 +34,9 @@ class AddEntry extends React.Component<{day: DayID}, typeof initialState> {
 
     handleInputChange = (value: string) => {
         if (value.trim()) {
-            this.setState({searchString: value});
+            this.setState({maybeCreateProject: value});
         }
+        this.setState({inputValue: value});
     };
 
     renderInputs(_: unknown, actions: MappedActions<typeof EntryConnect>) {
@@ -44,11 +45,13 @@ class AddEntry extends React.Component<{day: DayID}, typeof initialState> {
                 <ProjectsConnect
                     render={projects => (
                         <SelectItem
+                            inputValue={this.state.inputValue}
                             items={values(projects)
                                 .filter(notEmpty)
                                 .map(p => ({label: p.name, id: p.id}))}
                             onInputValueChange={this.handleInputChange}
                             onSelect={project => {
+                                this.setState({inputValue: ""});
                                 actions.addEntry({
                                     day: this.props.day,
                                     entry: {
@@ -62,7 +65,7 @@ class AddEntry extends React.Component<{day: DayID}, typeof initialState> {
                         />
                     )}
                 />
-                <CreateProject name={this.state.searchString} />
+                <CreateProject name={this.state.maybeCreateProject} />
             </Row>
         );
     }

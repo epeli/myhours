@@ -41,6 +41,7 @@ interface Item {
 interface Props<T extends Item> {
     items: T[];
     onSelect(item: T): void;
+    inputValue: string;
     onInputValueChange(value: string): void;
 }
 
@@ -50,9 +51,13 @@ function SelectItem<T extends Item>(props: Props<T>) {
     return (
         <div>
             <TypedDownshift
-                onSelect={item => {
+                inputValue={props.inputValue}
+                onChange={(item, state) => {
+                    if (!item) {
+                        return;
+                    }
                     props.onSelect(item as T);
-                    console.log("select", item);
+                    state.clearSelection();
                 }}
                 itemToString={item => (item ? item.label : "")}
                 onInputValueChange={value => {

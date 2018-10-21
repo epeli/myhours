@@ -170,7 +170,7 @@ class EntryClass extends React.Component<Props, State> {
                 <ButtonContainer>
                     <IconButton
                         onClick={() => {
-                            setTimeout(this.props.deleteEntry, 300);
+                            this.props.deleteEntry();
                         }}
                     >
                         <DeleteIcon color="action" />
