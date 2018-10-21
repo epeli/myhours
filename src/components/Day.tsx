@@ -22,7 +22,6 @@ const Container = styled(View)({
 
 const Day = (props: {id: DayID}) => (
     <Container>
-        hei 9
         <EntriesConnect
             date={props.id}
             render={data =>

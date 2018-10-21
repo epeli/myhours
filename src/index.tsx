@@ -7,6 +7,10 @@ import {HashRouter as Router} from "react-router-dom";
 import Main from "./components/Main";
 import {createMyHoursStore} from "./redux/store";
 
+const anyWindow = window as any;
+// https://material-ui.com/style/typography/#migration-to-typography-v2
+anyWindow.__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true;
+
 const store = createMyHoursStore();
 
 const Root = () => (
