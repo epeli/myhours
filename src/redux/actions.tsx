@@ -127,6 +127,12 @@ export const Thunks = {
         const state = await idb.get<State>("myhours");
         if (state) {
             store.dispatch(SimpleActions.restore({state}));
+        } else {
+            store.dispatch(
+                SimpleActions.restore({
+                    state: {...initialState, restored: true},
+                }),
+            );
         }
     }),
 };
