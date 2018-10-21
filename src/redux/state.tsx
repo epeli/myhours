@@ -3,21 +3,11 @@ import {values} from "lodash-es";
 
 import {Branded, notEmpty} from "../utils";
 
+import {createDayID} from "./state-tools";
+
 export type ProjectID = Branded<"project", string>;
 export type DayID = Branded<"day", string>;
 export type EntryID = Branded<"entry", string>;
-
-export function createDayID(date: Date): DayID {
-    return datefns.format(date, "YYYY-MM-dd") as DayID;
-}
-
-export function entryDateAsDate(date: DayID): Date {
-    return datefns.parse(date as string, "YYYY-MM-dd", new Date());
-}
-
-export function generateEntryId(): EntryID {
-    return String(Math.random()) as EntryID;
-}
 
 export interface Project {
     id: ProjectID;

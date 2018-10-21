@@ -5,7 +5,8 @@ import React from "react";
 import {MappedActions} from "redux-render-prop";
 
 import {createMyHoursConnect} from "../redux/create-connect";
-import {DayID, generateEntryId, Project} from "../redux/state";
+import {DayID, Project} from "../redux/state";
+import {generateEntryId} from "../redux/state-tools";
 
 import {Row, View} from "./core";
 import SelectProject from "./SelectProject";

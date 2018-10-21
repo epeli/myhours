@@ -2,7 +2,7 @@ import * as datefns from "date-fns";
 import {range} from "lodash-es";
 import React from "react";
 
-import {createDayID} from "../redux/state";
+import {createDayID} from "../redux/state-tools";
 
 import {Row} from "./core";
 import Day from "./Day";

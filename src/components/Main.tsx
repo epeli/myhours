@@ -2,7 +2,7 @@ import * as datefns from "date-fns";
 import React from "react";
 import {Route, RouteProps, Switch} from "react-router-dom";
 
-import {createDayID} from "../redux/state";
+import {createDayID} from "../redux/state-tools";
 
 import Day from "./Day";
 import Week from "./Week";
