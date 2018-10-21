@@ -1,13 +1,8 @@
-import Chip from "@material-ui/core/Chip";
 import MenuItem from "@material-ui/core/MenuItem";
 import Paper from "@material-ui/core/Paper";
-import Popper from "@material-ui/core/Popper";
-import {withStyles} from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Downshift from "downshift";
-import keycode from "keycode";
 import deburr from "lodash/deburr";
-import PropTypes from "prop-types";
 import React from "react";
 
 const suggestions = [
