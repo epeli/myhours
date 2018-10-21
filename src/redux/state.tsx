@@ -41,45 +41,8 @@ export interface State {
 
 export const initialState: State = {
     restored: false,
-    projects: {
-        foo: {
-            id: "foo" as ProjectID,
-            name: "Project Foo",
-        },
-        bar: {
-            id: "bar" as ProjectID,
-            name: "Project Bar",
-        },
-    },
-
-    days: {
-        [createDayID(new Date("2018-10-21"))]: {
-            id: createDayID(new Date("2018-10-21")),
-            daySaves: false,
-            entries: [
-                {
-                    id: "1" as EntryID,
-                    projectID: "bar" as ProjectID,
-                    comment: "testi",
-                    start: new Date("2018-10-21 09:12").getTime(),
-                    end: new Date("2018-10-21 12:44").getTime(),
-                },
-                {
-                    id: "2" as EntryID,
-                    projectID: "bar" as ProjectID,
-                    comment: "testi jo",
-                    start: new Date("2018-10-21 12:44").getTime(),
-                    end: new Date("2018-10-21 14:01").getTime(),
-                },
-                {
-                    id: "3" as EntryID,
-                    projectID: "bar" as ProjectID,
-                    comment: "bar juttu",
-                    start: new Date("2018-10-21 14:01").getTime(),
-                },
-            ],
-        },
-    },
+    projects: {},
+    days: {},
 };
 
 export class Selectors {
