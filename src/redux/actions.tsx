@@ -5,10 +5,6 @@ import {last, range} from "lodash-es";
 import {DayID, Entry, EntryID, initialState} from "./state";
 
 export const SimpleActions = createSimpleActions(initialState, {
-    setCount(draftState, action: {newCount: number}) {
-        return draftState;
-    },
-
     addEntry(draftState, action: {day: DayID; entry: Entry}) {
         let entry = action.entry;
         const draftDay = draftState.days[action.day];
