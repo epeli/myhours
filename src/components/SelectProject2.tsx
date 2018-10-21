@@ -3,6 +3,7 @@ import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
 import Downshift from "downshift";
 import deburr from "lodash/deburr";
+import matchSorter from "match-sorter";
 import React from "react";
 
 const suggestions = [
@@ -88,31 +89,14 @@ function renderSuggestion({
 }
 
 function getSuggestions(value: string) {
-    const inputValue = deburr(value.trim()).toLowerCase();
-    const inputLength = inputValue.length;
-    let count = 0;
-
-    return inputLength === 0
-        ? []
-        : suggestions.filter(suggestion => {
-              const keep =
-                  count < 5 &&
-                  suggestion.label.slice(0, inputLength).toLowerCase() ===
-                      inputValue;
-
-              if (keep) {
-                  count += 1;
-              }
-
-              return keep;
-          });
+    return matchSorter(suggestions, value, {keys: ["label"]}).slice(0, 10);
 }
 
-function IntegrationDownshift(props: any) {
+function IntegrationDownshift() {
     return (
         <div>
             <Downshift
-                onSelect={(e, state) => {
+                onSelect={e => {
                     console.log("select", e);
                 }}
                 onStateChange={(changes, state) => {
