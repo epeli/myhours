@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDom from "react-dom";
-import {hot} from "react-hot-loader";
 import {Provider} from "react-redux";
 import {HashRouter as Router} from "react-router-dom";
 
@@ -28,10 +27,8 @@ const el = document.getElementById("root");
 
 declare const module: any;
 
-const HotRoot = hot(module)(Root);
-
 if (el) {
-    ReactDom.render(module.hot ? <HotRoot /> : <Root />, el);
+    ReactDom.render(<Root />, el);
 } else {
     throw new Error("cannot find div#root");
 }

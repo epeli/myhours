@@ -1,5 +1,6 @@
 import * as datefns from "date-fns";
 import React from "react";
+import {hot} from "react-hot-loader";
 import {Route, RouteProps, Switch} from "react-router-dom";
 
 import {createDayID} from "../redux/state-tools";
@@ -42,4 +43,8 @@ const Main = () => (
     </Switch>
 );
 
-export default Main;
+declare const module: any;
+
+const HotMain = hot(module)(Main);
+
+export default (module.hot ? HotMain : Main);
