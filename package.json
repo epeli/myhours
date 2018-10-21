@@ -31,6 +31,7 @@
         "emotion": "^9.2.12",
         "graphql": "^14.0.2",
         "html-webpack-plugin": "^3.2.0",
+        "idb-keyval": "^3.1.0",
         "immer": "^1.7.2",
         "jake": "^8.0.18",
         "lodash-es": "^4.17.11",
