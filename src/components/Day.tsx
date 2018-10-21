@@ -22,6 +22,7 @@ const Container = styled(View)({
 
 const Day = (props: {id: DayID}) => (
     <Container>
+        <AddEntry day={props.id} />
         <EntriesConnect
             date={props.id}
             render={data =>
@@ -30,7 +31,6 @@ const Day = (props: {id: DayID}) => (
                 ))
             }
         />
-        <AddEntry day={props.id} />
     </Container>
 );
 

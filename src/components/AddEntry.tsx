@@ -9,6 +9,7 @@ import {createMyHoursConnect} from "../redux/store";
 
 import {Row, View} from "./core";
 import SelectProject from "./SelectProject";
+import SelectProject2 from "./SelectProject2";
 
 const EntryConnect = createMyHoursConnect({
     mapActions: actions => ({
@@ -38,6 +39,7 @@ class AddEntry extends React.Component<{day: DayID}, typeof initialState> {
     renderInputs(_: unknown, actions: MappedActions<typeof EntryConnect>) {
         return (
             <View>
+                <SelectProject2 />
                 <SelectProject
                     project={this.state.project}
                     onChange={project => {

@@ -126,7 +126,6 @@ class EntryClass extends React.Component<Props, State> {
                 <Slider
                     min={0}
                     max={60 * 5}
-                    step={1}
                     value={this.getDuration() / 1000 / 60}
                     onChange={this.handleSlider}
                     onDragEnd={this.handleSliderDragEnd}
