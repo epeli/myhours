@@ -37,8 +37,6 @@ const Container = styled(Paper)({
 const ActionsContainer = styled(View)({
     alignItems: "center",
     flexDirection: "row",
-    padding: rem(16),
-    margin: rem(16),
 });
 
 const DurationContainer = styled(View)({
