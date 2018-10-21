@@ -2,7 +2,6 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
 import Downshift from "downshift";
-import deburr from "lodash/deburr";
 import matchSorter from "match-sorter";
 import React from "react";
 
