@@ -4,7 +4,8 @@ import * as idb from "idb-keyval";
 import {last, range} from "lodash-es";
 
 import {createMyHoursThunk} from "./create-thunk";
-import {DayID, Entry, EntryID, initialState, State} from "./state";
+import {DayID, Entry, EntryID, initialState, ProjectID, State} from "./state";
+import {createProjectId} from "./state-tools";
 
 export const SimpleActions = createSimpleActions(initialState, {
     restore(_, action: {state: State}) {
@@ -100,6 +101,17 @@ export const SimpleActions = createSimpleActions(initialState, {
                 }
             }
         }
+
+        return draftState;
+    },
+
+    addProject(draftState, action: {name: string}) {
+        const id = createProjectId(action.name);
+
+        draftState.projects[id] = {
+            id: id,
+            name: action.name,
+        };
 
         return draftState;
     },
