@@ -1,3 +1,4 @@
+import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Paper from "@material-ui/core/Paper";
@@ -33,11 +34,31 @@ const Container = styled(Paper)({
     margin: rem(16),
 });
 
-const SliderContainer = styled(View)({
+const ActionsContainer = styled(View)({
+    alignItems: "center",
     flexDirection: "row",
     padding: rem(16),
     margin: rem(16),
 });
+
+const DurationContainer = styled(View)({
+    flexDirection: "row",
+    width: rem(200),
+    padding: rem(16),
+    margin: rem(16),
+});
+
+const Duration = (props: {duration: number}) => {
+    const minutes = props.duration / 1000 / 60;
+    return (
+        <DurationContainer>
+            <Typography variant="caption">
+                {Math.floor(minutes / 60)} hours {Math.round(minutes % 60)}{" "}
+                minutes
+            </Typography>
+        </DurationContainer>
+    );
+};
 
 interface Props {
     day: DayID;
@@ -77,15 +98,38 @@ class EntryClass extends React.Component<Props, State> {
         this.setState({sliderValue: null});
     };
 
-    getSliderValue(): number {
+    getDuration(): number {
         if (typeof this.state.sliderValue === "number") {
-            return this.state.sliderValue;
+            return this.state.sliderValue * 1000 * 60;
         }
 
         const start = this.props.entry.start;
         const end = this.props.entry.end || Date.now();
 
-        return (end - start) / 1000 / 60;
+        return end - start;
+    }
+
+    renderSlider() {
+        return (
+            <>
+                <Slider
+                    min={0}
+                    max={60 * 5}
+                    step={1}
+                    value={this.getDuration() / 1000 / 60}
+                    onChange={this.handleSlider}
+                    onDragEnd={this.handleSliderDragEnd}
+                />
+            </>
+        );
+    }
+
+    renderStopButton() {
+        return (
+            <Button fullWidth variant="outlined" color="primary">
+                Stop
+            </Button>
+        );
     }
 
     render() {
@@ -102,7 +146,7 @@ class EntryClass extends React.Component<Props, State> {
                                 {datefns.format(entry.start, "HH:mm")}
                                 {" - "}
                                 {datefns.format(
-                                    entry.end || Date.now(),
+                                    entry.start + this.getDuration(),
                                     "HH:mm",
                                 )}{" "}
                                 {!entry.end ? "and counting..." : ""}
@@ -111,17 +155,12 @@ class EntryClass extends React.Component<Props, State> {
                     />
                 </Typography>
 
-                <SliderContainer>
-                    <Typography>{this.getSliderValue()} min</Typography>
-                    <Slider
-                        min={0}
-                        max={60 * 5}
-                        step={1}
-                        value={this.getSliderValue()}
-                        onChange={this.handleSlider}
-                        onDragEnd={this.handleSliderDragEnd}
-                    />
-                </SliderContainer>
+                <ActionsContainer>
+                    <Duration duration={this.getDuration()} />
+                    {this.props.entry.end
+                        ? this.renderSlider()
+                        : this.renderStopButton()}
+                </ActionsContainer>
 
                 <Typography component="p">{entry.comment}</Typography>
             </Container>
