@@ -2,13 +2,13 @@ import React from "react";
 import styled from "react-emotion";
 
 import {DayID} from "../redux/state";
-import {createMyHoursComponent} from "../redux/store";
+import {createMyHoursConnect} from "../redux/store";
 
 import AddEntry from "./AddEntry";
 import {View} from "./core";
 import Entry from "./Entry";
 
-const EntriesConnect = createMyHoursComponent({
+const EntriesConnect = createMyHoursConnect({
     mapState: (selectors, props: {date: DayID}) => ({
         entryIDs: selectors.getEntryIDs(props.date),
     }),

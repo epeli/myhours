@@ -5,12 +5,12 @@ import React from "react";
 import {MappedActions} from "redux-render-prop";
 
 import {DayID, generateEntryId, Project} from "../redux/state";
-import {createMyHoursComponent} from "../redux/store";
+import {createMyHoursConnect} from "../redux/store";
 
 import {Row, View} from "./core";
 import SelectProject from "./SelectProject";
 
-const EntryConnect = createMyHoursComponent({
+const EntryConnect = createMyHoursConnect({
     mapActions: actions => ({
         addEntry: actions.addEntry,
     }),

@@ -14,7 +14,7 @@ export const createMyHoursThunk = makeThunkCreator(store => ({
     dispatch: store.dispatch,
 }));
 
-export const createMyHoursComponent = makeComponentCreator({
+export const createMyHoursConnect = makeComponentCreator({
     prepareState: (state: State) => new Selectors(state),
 
     prepareActions: dispatch => {

@@ -4,14 +4,14 @@ import Typography from "@material-ui/core/Typography";
 import React from "react";
 
 import {DayID, EntryID, ProjectID} from "../redux/state";
-import {createMyHoursComponent} from "../redux/store";
+import {createMyHoursConnect} from "../redux/store";
 
-const EntryConnect = createMyHoursComponent({
+const EntryConnect = createMyHoursConnect({
     mapState: (selectors, props: {day: DayID; id: EntryID}) =>
         selectors.getEntry(props.day, props.id) || null,
 });
 
-const ProjectConnect = createMyHoursComponent({
+const ProjectConnect = createMyHoursConnect({
     mapState: (selectors, props: {id: ProjectID}) =>
         selectors.getProject(props.id),
 });

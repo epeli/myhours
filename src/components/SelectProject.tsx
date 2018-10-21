@@ -7,11 +7,11 @@ import React from "react";
 import styled from "react-emotion";
 
 import {Project, ProjectID} from "../redux/state";
-import {createMyHoursComponent} from "../redux/store";
+import {createMyHoursConnect} from "../redux/store";
 
 import {Row, View} from "./core";
 
-const ProjectsConnect = createMyHoursComponent({
+const ProjectsConnect = createMyHoursConnect({
     mapState: s => s.getProjects(),
 });
 
