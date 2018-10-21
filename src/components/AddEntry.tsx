@@ -1,16 +1,14 @@
-import Button from "@material-ui/core/Button";
-import Icon from "@material-ui/core/Icon";
-import Input from "@material-ui/core/Input";
+import {notEmpty} from "@epeli/utils";
+import {values} from "lodash-es";
 import React from "react";
 import {MappedActions} from "redux-render-prop";
 
 import {createMyHoursConnect} from "../redux/create-connect";
-import {DayID, Project} from "../redux/state";
+import {DayID} from "../redux/state";
 import {generateEntryId} from "../redux/state-tools";
 
-import {Row, View} from "./core";
-import SelectProject from "./SelectProject";
-import SelectProject2 from "./SelectProject2";
+import {View} from "./core";
+import SelectItem from "./SelectItem";
 
 const EntryConnect = createMyHoursConnect({
     mapActions: actions => ({
@@ -18,64 +16,41 @@ const EntryConnect = createMyHoursConnect({
     }),
 });
 
-const initialState = {
-    comment: "",
-    project: null as Project | null,
-    duration: 0,
-};
+const ProjectsConnect = createMyHoursConnect({
+    mapState: selectors => selectors.state.projects,
+});
 
-class AddEntry extends React.Component<{day: DayID}, typeof initialState> {
-    state = initialState;
-
+class AddEntry extends React.Component<{day: DayID}> {
     render() {
         return (
             <EntryConnect render={(...args) => this.renderInputs(...args)} />
         );
     }
 
-    canAdd() {
-        return Boolean(this.state.project);
-    }
-
     renderInputs(_: unknown, actions: MappedActions<typeof EntryConnect>) {
         return (
             <View>
-                <SelectProject2 />
-                <SelectProject
-                    project={this.state.project}
-                    onChange={project => {
-                        this.setState({project});
-                    }}
+                <ProjectsConnect
+                    render={projects => (
+                        <SelectItem
+                            items={values(projects)
+                                .filter(notEmpty)
+                                .map(p => ({label: p.name, id: p.id}))}
+                            onInputValueChange={() => {}}
+                            onSelect={project => {
+                                actions.addEntry({
+                                    day: this.props.day,
+                                    entry: {
+                                        id: generateEntryId(),
+                                        projectID: project.id,
+                                        start: Date.now(),
+                                        comment: "",
+                                    },
+                                });
+                            }}
+                        />
+                    )}
                 />
-                <Input
-                    placeholder="Comment"
-                    value={this.state.comment}
-                    onChange={e => {
-                        this.setState({comment: e.target.value});
-                    }}
-                />
-                <Button
-                    variant="contained"
-                    color="primary"
-                    disabled={!this.canAdd()}
-                    onClick={() => {
-                        if (!this.state.project) {
-                            return;
-                        }
-                        actions.addEntry({
-                            day: this.props.day,
-                            entry: {
-                                id: generateEntryId(),
-                                projectID: this.state.project.id,
-                                comment: this.state.comment,
-                                start: Date.now(),
-                            },
-                        });
-                    }}
-                >
-                    Send
-                    <Icon>send</Icon>
-                </Button>
             </View>
         );
     }
