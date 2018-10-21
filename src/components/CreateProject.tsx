@@ -2,18 +2,22 @@ import Button from "@material-ui/core/Button";
 import React from "react";
 
 import {createMyHoursConnect} from "../redux/create-connect";
+import {Project, ProjectID} from "../redux/state";
 import {createProjectId} from "../redux/state-tools";
 
 const ProjectsConnect = createMyHoursConnect({
     mapState: selectors => selectors.state.projects,
     mapActions: actions => ({
-        addProject(name: string) {
-            actions.addProject({name});
+        addProject(project: Project) {
+            actions.addProject(project);
         },
     }),
 });
 
-const CreateProject = (props: {name: string}) => (
+const CreateProject = (props: {
+    name: string;
+    onCreate: (project: Project) => void;
+}) => (
     <ProjectsConnect
         render={(projects, actions) => {
             if (props.name.trim().length < 5) {
@@ -26,9 +30,16 @@ const CreateProject = (props: {name: string}) => (
 
             return (
                 <Button
+                    color="primary"
                     onClick={e => {
                         e.preventDefault();
-                        actions.addProject(props.name);
+
+                        const project = {
+                            id: createProjectId(props.name),
+                            name: props.name,
+                        };
+                        actions.addProject(project);
+                        props.onCreate(project);
                     }}
                 >
                     Create project

@@ -71,7 +71,20 @@ class AddEntry extends React.Component<{day: DayID}, typeof initialState> {
                         />
                     )}
                 />
-                <CreateProject name={this.state.maybeCreateProject} />
+                <CreateProject
+                    name={this.state.maybeCreateProject}
+                    onCreate={project => {
+                        actions.addEntry({
+                            day: this.props.day,
+                            entry: {
+                                id: generateEntryId(),
+                                projectID: project.id,
+                                start: Date.now(),
+                                comment: "",
+                            },
+                        });
+                    }}
+                />
             </Row>
         );
     }
