@@ -7,7 +7,8 @@ import {createMyHoursConnect} from "../redux/create-connect";
 import {DayID} from "../redux/state";
 import {generateEntryId} from "../redux/state-tools";
 
-import {View} from "./core";
+import {Row, View} from "./core";
+import CreateProject from "./CreateProject";
 import SelectItem from "./SelectItem";
 
 const EntryConnect = createMyHoursConnect({
@@ -20,23 +21,33 @@ const ProjectsConnect = createMyHoursConnect({
     mapState: selectors => selectors.state.projects,
 });
 
-class AddEntry extends React.Component<{day: DayID}> {
+const initialState = {searchString: ""};
+
+class AddEntry extends React.Component<{day: DayID}, typeof initialState> {
+    state = initialState;
+
     render() {
         return (
             <EntryConnect render={(...args) => this.renderInputs(...args)} />
         );
     }
 
+    handleInputChange = (value: string) => {
+        if (value.trim()) {
+            this.setState({searchString: value});
+        }
+    };
+
     renderInputs(_: unknown, actions: MappedActions<typeof EntryConnect>) {
         return (
-            <View>
+            <Row>
                 <ProjectsConnect
                     render={projects => (
                         <SelectItem
                             items={values(projects)
                                 .filter(notEmpty)
                                 .map(p => ({label: p.name, id: p.id}))}
-                            onInputValueChange={() => {}}
+                            onInputValueChange={this.handleInputChange}
                             onSelect={project => {
                                 actions.addEntry({
                                     day: this.props.day,
@@ -51,7 +62,8 @@ class AddEntry extends React.Component<{day: DayID}> {
                         />
                     )}
                 />
-            </View>
+                <CreateProject name={this.state.searchString} />
+            </Row>
         );
     }
 }
