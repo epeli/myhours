@@ -6,6 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Slider from "@material-ui/lab/Slider";
 import * as datefns from "date-fns";
+import {debounce} from "lodash-es";
 import {rem} from "polished";
 import React from "react";
 import styled from "react-emotion";
@@ -94,16 +95,11 @@ class EntryClass extends React.Component<Props, State> {
     }
 
     handleSlider = (e: unknown, value: number) => {
-        const endTime = this.props.entry.start + value * 1000 * 60;
-
-        if (this.props.isNextRunning && endTime > Date.now()) {
-            return;
-        }
-
         this.setState({sliderValue: value});
+        this.debounceStoreUpdate();
     };
 
-    handleSliderDragEnd = () => {
+    debounceStoreUpdate = debounce(() => {
         if (typeof this.state.sliderValue !== "number") {
             return;
         }
@@ -115,7 +111,7 @@ class EntryClass extends React.Component<Props, State> {
         });
 
         this.setState({sliderValue: null});
-    };
+    }, 500);
 
     handleStop = () => {
         this.props.setEntryEnd({
@@ -144,7 +140,6 @@ class EntryClass extends React.Component<Props, State> {
                     max={60 * 5}
                     value={this.getDuration() / 1000 / 60}
                     onChange={this.handleSlider}
-                    onDragEnd={this.handleSliderDragEnd}
                 />
             </>
         );

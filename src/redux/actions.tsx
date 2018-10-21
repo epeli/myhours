@@ -99,10 +99,17 @@ export const SimpleActions = createSimpleActions(initialState, {
         }
 
         const entry = day.entries[entryIndex];
+        const previous: Entry | undefined = day.entries[entryIndex - 1];
+        const next: Entry | undefined = day.entries[entryIndex + 1];
+        let end = action.end;
 
-        const change = action.end - (entry.end || action.end);
+        if (next && !next.end) {
+            end = Date.now();
+        }
 
-        entry.end = action.end;
+        const change = action.end - (entry.end || end);
+
+        entry.end = end;
 
         if (Math.abs(change) > 0) {
             for (const index of range(entryIndex + 1, day.entries.length)) {
