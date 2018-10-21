@@ -184,11 +184,12 @@ class EntryClass extends React.Component<Props, State> {
                                 {data.name}{" "}
                                 {datefns.format(entry.start, "HH:mm")}
                                 {" - "}
-                                {datefns.format(
-                                    entry.start + this.getDuration(),
-                                    "HH:mm",
-                                )}{" "}
-                                {!entry.end ? "and counting..." : ""}
+                                {entry.end
+                                    ? datefns.format(
+                                          entry.start + this.getDuration(),
+                                          "HH:mm",
+                                      )
+                                    : "now..."}
                             </span>
                         )}
                     />
