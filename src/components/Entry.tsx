@@ -1,6 +1,8 @@
 import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
+import DeleteIcon from "@material-ui/icons/Delete";
 import Slider from "@material-ui/lab/Slider";
 import * as datefns from "date-fns";
 import {rem} from "polished";
@@ -21,8 +23,14 @@ const EntryConnect = createMyHoursConnect({
             isNextRunning: nextEntry ? !nextEntry.end : false,
         };
     },
-    mapActions: actions => ({
+    mapActions: (actions, props) => ({
         setEntryEnd: actions.setEntryEnd,
+        deleteEntry() {
+            actions.deleteEntry({
+                dayID: props.day,
+                entryID: props.id,
+            });
+        },
     }),
 });
 
@@ -31,7 +39,7 @@ const ProjectConnect = createMyHoursConnect({
         selectors.getProject(props.id),
 });
 
-const Container = styled(Paper)({
+const Container = styled(View.withComponent(Paper))({
     padding: rem(16),
     margin: rem(16),
 });
@@ -46,6 +54,12 @@ const DurationContainer = styled(View)({
     width: rem(200),
     padding: rem(16),
     margin: rem(16),
+});
+
+const ButtonContainer = styled(View)({
+    position: "absolute",
+    top: rem(5),
+    right: rem(5),
 });
 
 const Duration = (props: {duration: number}) => {
@@ -65,6 +79,7 @@ interface Props {
     entry: Entry;
     isNextRunning: boolean;
     setEntryEnd: MappedActions<typeof EntryConnect>["setEntryEnd"];
+    deleteEntry: () => void;
 }
 
 interface State {
@@ -152,6 +167,15 @@ class EntryClass extends React.Component<Props, State> {
 
         return (
             <Container>
+                <ButtonContainer>
+                    <IconButton
+                        onClick={() => {
+                            setTimeout(this.props.deleteEntry, 300);
+                        }}
+                    >
+                        <DeleteIcon color="action" />
+                    </IconButton>
+                </ButtonContainer>
                 <Typography variant="h5" component="h2">
                     <ProjectConnect
                         id={entry.projectID}
@@ -169,14 +193,12 @@ class EntryClass extends React.Component<Props, State> {
                         )}
                     />
                 </Typography>
-
                 <ActionsContainer>
                     <Duration duration={this.getDuration()} />
                     {this.props.entry.end
                         ? this.renderSlider()
                         : this.renderStopButton()}
                 </ActionsContainer>
-
                 <Typography component="p">{entry.comment}</Typography>
             </Container>
         );
@@ -192,6 +214,7 @@ const EntryWrap = (props: {day: DayID; id: EntryID}) => (
                 <EntryClass
                     day={props.day}
                     entry={data.entry}
+                    deleteEntry={actions.deleteEntry}
                     isNextRunning={data.isNextRunning}
                     setEntryEnd={actions.setEntryEnd}
                 />

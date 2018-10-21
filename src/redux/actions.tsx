@@ -119,6 +119,27 @@ export const SimpleActions = createSimpleActions(initialState, {
 
         return draftState;
     },
+
+    deleteEntry(
+        draftState,
+        action: {
+            dayID: DayID;
+            entryID: EntryID;
+        },
+    ) {
+        const draftDay = draftState.days[action.dayID];
+
+        if (!draftDay) {
+            console.warn("Unknown day: " + action.dayID);
+            return draftState;
+        }
+
+        draftDay.entries = draftDay.entries.filter(
+            entry => entry.id !== action.entryID,
+        );
+
+        return draftState;
+    },
 });
 
 export const Thunks = {
