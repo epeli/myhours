@@ -4,14 +4,14 @@ import {values} from "lodash-es";
 import {Branded, notEmpty} from "../utils";
 
 export type ProjectID = Branded<"project", string>;
-export type EntryDate = Branded<"entry-date", string>;
+export type DayID = Branded<"day", string>;
 export type EntryID = Branded<"entry", string>;
 
-export function createEntryDate(date: Date): EntryDate {
-    return datefns.format(date, "YYYY-MM-dd") as EntryDate;
+export function createDayID(date: Date): DayID {
+    return datefns.format(date, "YYYY-MM-dd") as DayID;
 }
 
-export function entryDateAsDate(date: EntryDate): Date {
+export function entryDateAsDate(date: DayID): Date {
     return datefns.parse(date as string, "YYYY-MM-dd", new Date());
 }
 
@@ -33,7 +33,7 @@ export interface Entry {
 }
 
 export interface Day {
-    id: EntryDate;
+    id: DayID;
     daySaves: boolean;
     entries: Entry[];
 }
@@ -61,8 +61,8 @@ export const initialState: State = {
     },
 
     days: {
-        [createEntryDate(new Date("2018-10-21"))]: {
-            id: createEntryDate(new Date("2018-10-21")),
+        [createDayID(new Date("2018-10-21"))]: {
+            id: createDayID(new Date("2018-10-21")),
             daySaves: false,
             entries: [
                 {
@@ -89,11 +89,11 @@ export class Selectors {
         this.state = state;
     }
 
-    getEntryIDs(date: EntryDate): EntryID[] {
+    getEntryIDs(date: DayID): EntryID[] {
         return this.getEntries(date).map(entry => entry.id);
     }
 
-    getEntry(date: EntryDate, id: EntryID): Entry | undefined {
+    getEntry(date: DayID, id: EntryID): Entry | undefined {
         const day = this.state.days[date];
         if (!day) {
             return;
@@ -102,7 +102,7 @@ export class Selectors {
         return day.entries.find(entry => entry.id == id);
     }
 
-    getEntries(date: EntryDate): Entry[] {
+    getEntries(date: DayID): Entry[] {
         const day = this.state.days[date];
         if (!day) {
             return [];

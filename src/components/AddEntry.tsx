@@ -4,7 +4,7 @@ import Input from "@material-ui/core/Input";
 import React from "react";
 import {MappedActions} from "redux-render-prop";
 
-import {EntryDate, generateEntryId, Project} from "../redux/state";
+import {DayID, generateEntryId, Project} from "../redux/state";
 import {createMyHoursComponent} from "../redux/store";
 
 import {Row, View} from "./core";
@@ -22,7 +22,7 @@ const initialState = {
     duration: 0,
 };
 
-class AddEntry extends React.Component<{date: EntryDate}, typeof initialState> {
+class AddEntry extends React.Component<{day: DayID}, typeof initialState> {
     state = initialState;
 
     render() {
@@ -71,7 +71,7 @@ class AddEntry extends React.Component<{date: EntryDate}, typeof initialState> {
                             return;
                         }
                         actions.addEntry({
-                            day: this.props.date,
+                            day: this.props.day,
                             entry: {
                                 id: generateEntryId(),
                                 projectID: this.state.project.id,

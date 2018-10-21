@@ -2,7 +2,7 @@ import * as datefns from "date-fns";
 import {range} from "lodash-es";
 import React from "react";
 
-import {createEntryDate} from "../redux/state";
+import {createDayID} from "../redux/state";
 
 import {Row} from "./core";
 import Day from "./Day";
@@ -27,7 +27,7 @@ const Week = (props: {year: number; week: number}) => {
             {range(7).map(num => (
                 <Day
                     key={num}
-                    date={createEntryDate(datefns.addDays(startOfTheWeek, num))}
+                    id={createDayID(datefns.addDays(startOfTheWeek, num))}
                 />
             ))}
         </Row>

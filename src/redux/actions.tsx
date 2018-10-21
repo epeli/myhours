@@ -1,13 +1,13 @@
 import {createSimpleActions} from "@epeli/redux-stack";
 
-import {Entry, EntryDate, initialState} from "./state";
+import {Entry, DayID, initialState} from "./state";
 
 export const SimpleActions = createSimpleActions(initialState, {
     setCount(draftState, action: {newCount: number}) {
         return draftState;
     },
 
-    addEntry(draftState, action: {day: EntryDate; entry: Entry}) {
+    addEntry(draftState, action: {day: DayID; entry: Entry}) {
         const day = draftState.days[action.day];
 
         if (!day) {

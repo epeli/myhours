@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "react-emotion";
 
-import {EntryDate} from "../redux/state";
+import {DayID} from "../redux/state";
 import {createMyHoursComponent} from "../redux/store";
 
 import AddEntry from "./AddEntry";
@@ -9,7 +9,7 @@ import {View} from "./core";
 import Entry from "./Entry";
 
 const EntriesConnect = createMyHoursComponent({
-    mapState: (selectors, props: {date: EntryDate}) => ({
+    mapState: (selectors, props: {date: DayID}) => ({
         entryIDs: selectors.getEntryIDs(props.date),
     }),
 });
@@ -20,18 +20,18 @@ const Container = styled(View)({
     alignItems: "space-between",
 });
 
-const Day = (props: {date: EntryDate}) => (
+const Day = (props: {id: DayID}) => (
     <Container>
         hei 9
         <EntriesConnect
-            date={props.date}
+            date={props.id}
             render={data =>
                 data.entryIDs.map(id => (
-                    <Entry key={id} day={props.date} id={id} />
+                    <Entry key={id} day={props.id} id={id} />
                 ))
             }
         />
-        <AddEntry date={props.date} />
+        <AddEntry day={props.id} />
     </Container>
 );
 
