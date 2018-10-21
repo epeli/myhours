@@ -66,17 +66,24 @@ export const initialState: State = {
             daySaves: false,
             entries: [
                 {
-                    id: "boo" as EntryID,
+                    id: "1" as EntryID,
                     projectID: "bar" as ProjectID,
                     comment: "testi",
                     start: new Date("2018-10-21 09:12").getTime(),
-                    end: new Date("2018-10-21 10:33").getTime(),
+                    end: new Date("2018-10-21 12:44").getTime(),
                 },
                 {
-                    id: "bar" as EntryID,
+                    id: "2" as EntryID,
+                    projectID: "bar" as ProjectID,
+                    comment: "testi jo",
+                    start: new Date("2018-10-21 12:44").getTime(),
+                    end: new Date("2018-10-21 14:01").getTime(),
+                },
+                {
+                    id: "3" as EntryID,
                     projectID: "bar" as ProjectID,
                     comment: "bar juttu",
-                    start: new Date("2018-10-21 10:33").getTime(),
+                    start: new Date("2018-10-21 14:01").getTime(),
                 },
             ],
         },
