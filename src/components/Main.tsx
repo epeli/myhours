@@ -8,13 +8,6 @@ import {createDayID} from "../redux/state-tools";
 import Day from "./Day";
 import Week from "./Week";
 
-function foo(options: {year: string; week: string}) {
-    let date = new Date();
-    date = datefns.setWeek(date, Number(options.week));
-    date = datefns.setYear(date, Number(options.year));
-    return createDayID(date);
-}
-
 const Main = () => (
     <Switch>
         <Route
