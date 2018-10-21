@@ -5,6 +5,7 @@ import {Provider} from "react-redux";
 import {HashRouter as Router} from "react-router-dom";
 
 import Main from "./components/Main";
+import PersistenceProvider from "./components/PersistenceProvider";
 import {createMyHoursStore} from "./redux/store";
 
 const anyWindow = window as any;
@@ -16,7 +17,9 @@ const store = createMyHoursStore();
 const Root = () => (
     <Router>
         <Provider store={store}>
-            <Main />
+            <PersistenceProvider>
+                <Main />
+            </PersistenceProvider>
         </Provider>
     </Router>
 );

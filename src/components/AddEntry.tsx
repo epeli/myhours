@@ -4,8 +4,8 @@ import Input from "@material-ui/core/Input";
 import React from "react";
 import {MappedActions} from "redux-render-prop";
 
+import {createMyHoursConnect} from "../redux/create-connect";
 import {DayID, generateEntryId, Project} from "../redux/state";
-import {createMyHoursConnect} from "../redux/store";
 
 import {Row, View} from "./core";
 import SelectProject from "./SelectProject";

@@ -1,10 +1,16 @@
 import {createSimpleActions} from "@epeli/redux-stack";
 import {Omit, strictAssign} from "@epeli/utils";
+import * as idb from "idb-keyval";
 import {last, range} from "lodash-es";
 
-import {DayID, Entry, EntryID, initialState} from "./state";
+import {createMyHoursThunk} from "./create-thunk";
+import {DayID, Entry, EntryID, initialState, State} from "./state";
 
 export const SimpleActions = createSimpleActions(initialState, {
+    restore(_, action: {state: State}) {
+        return {...action.state, restored: true};
+    },
+
     addEntry(draftState, action: {day: DayID; entry: Entry}) {
         let entry = action.entry;
         const draftDay = draftState.days[action.day];
@@ -98,3 +104,17 @@ export const SimpleActions = createSimpleActions(initialState, {
         return draftState;
     },
 });
+
+export const Thunks = {
+    persists: createMyHoursThunk(() => async store => {
+        await idb.set("myhours", store.getState());
+        console.log("Saved");
+    }),
+
+    loadState: createMyHoursThunk(() => async store => {
+        const state = await idb.get<State>("myhours");
+        if (state) {
+            store.dispatch(SimpleActions.restore({state}));
+        }
+    }),
+};

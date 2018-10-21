@@ -6,8 +6,8 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import React from "react";
 import styled from "react-emotion";
 
+import {createMyHoursConnect} from "../redux/create-connect";
 import {Project, ProjectID} from "../redux/state";
-import {createMyHoursConnect} from "../redux/store";
 
 import {Row, View} from "./core";
 

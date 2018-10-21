@@ -8,8 +8,8 @@ import React from "react";
 import styled from "react-emotion";
 import {MappedActions} from "redux-render-prop";
 
+import {createMyHoursConnect} from "../redux/create-connect";
 import {DayID, Entry, EntryID, ProjectID} from "../redux/state";
-import {createMyHoursConnect} from "../redux/store";
 
 import {View} from "./core";
 

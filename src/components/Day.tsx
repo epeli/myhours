@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "react-emotion";
 
+import {createMyHoursConnect} from "../redux/create-connect";
 import {DayID} from "../redux/state";
-import {createMyHoursConnect} from "../redux/store";
 
 import AddEntry from "./AddEntry";
 import {View} from "./core";

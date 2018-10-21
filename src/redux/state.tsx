@@ -39,6 +39,8 @@ export interface Day {
 }
 
 export interface State {
+    restored: boolean;
+
     projects: {
         [projectId: string]: Project | undefined;
     };
@@ -49,6 +51,7 @@ export interface State {
 }
 
 export const initialState: State = {
+    restored: false,
     projects: {
         foo: {
             id: "foo" as ProjectID,
