@@ -98,6 +98,16 @@ class EntryClass extends React.Component<Props, State> {
         this.setState({sliderValue: null});
     };
 
+    handleStop = () => {
+        this.props.setEntryValues({
+            day: this.props.day,
+            entryID: this.props.entry.id,
+            values: {
+                end: Date.now(),
+            },
+        });
+    };
+
     getDuration(): number {
         if (typeof this.state.sliderValue === "number") {
             return this.state.sliderValue * 1000 * 60;
@@ -126,7 +136,12 @@ class EntryClass extends React.Component<Props, State> {
 
     renderStopButton() {
         return (
-            <Button fullWidth variant="outlined" color="primary">
+            <Button
+                fullWidth
+                variant="outlined"
+                color="primary"
+                onClick={this.handleStop}
+            >
                 Stop
             </Button>
         );
