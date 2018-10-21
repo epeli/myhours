@@ -1,4 +1,5 @@
 import Button from "@material-ui/core/Button";
+import Tooltip from "@material-ui/core/Tooltip";
 import React from "react";
 
 import {createMyHoursConnect} from "../redux/create-connect";
@@ -28,23 +29,29 @@ const CreateProject = (props: {
                 return null;
             }
 
-            return (
-                <Button
-                    color="primary"
-                    onClick={e => {
-                        e.preventDefault();
+            const id = createProjectId(props.name);
 
-                        const project = {
-                            id: createProjectId(props.name),
-                            name: props.name,
-                        };
-                        actions.addProject(project);
-                        props.onCreate(project);
-                    }}
+            return (
+                <Tooltip
+                    title={`Creates new project with id ${id} and adds an entry for it`}
                 >
-                    Create project
-                    <br />"{props.name}"
-                </Button>
+                    <Button
+                        color="primary"
+                        onClick={e => {
+                            e.preventDefault();
+
+                            const project = {
+                                id,
+                                name: props.name,
+                            };
+                            actions.addProject(project);
+                            props.onCreate(project);
+                        }}
+                    >
+                        Create project
+                        <br />"{props.name}"
+                    </Button>
+                </Tooltip>
             );
         }}
     />
