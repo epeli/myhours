@@ -4,7 +4,7 @@ import {deburr} from "lodash-es";
 import {DayID, EntryID, ProjectID} from "./state";
 
 export function createDayID(date: Date): DayID {
-    return datefns.format(date, "yyy-MM-dd") as DayID;
+    return datefns.format(date, "yyyy-MM-dd") as DayID;
 }
 export function entryDateAsDate(dayID: DayID): Date {
     return datefns.parse(dayID as string, "YYYY-MM-dd", new Date());
