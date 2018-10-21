@@ -1,6 +1,7 @@
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import Paper from "@material-ui/core/Paper";
+import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Slider from "@material-ui/lab/Slider";
@@ -168,13 +169,15 @@ class EntryClass extends React.Component<Props, State> {
         return (
             <Container>
                 <ButtonContainer>
-                    <IconButton
-                        onClick={() => {
-                            this.props.deleteEntry();
-                        }}
-                    >
-                        <DeleteIcon color="action" />
-                    </IconButton>
+                    <Tooltip placement="right" title="Remove entry">
+                        <IconButton
+                            onClick={() => {
+                                this.props.deleteEntry();
+                            }}
+                        >
+                            <DeleteIcon color="action" />
+                        </IconButton>
+                    </Tooltip>
                 </ButtonContainer>
                 <Typography variant="h5" component="h2">
                     <ProjectConnect
