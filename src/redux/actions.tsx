@@ -11,24 +11,25 @@ export const SimpleActions = createSimpleActions(initialState, {
 
     addEntry(draftState, action: {day: DayID; entry: Entry}) {
         let entry = action.entry;
-        const day = draftState.days[action.day];
+        const draftDay = draftState.days[action.day];
 
-        if (!day) {
+        if (!draftDay) {
             console.warn("Unknown day: " + action.day);
             return draftState;
         }
 
-        const prevEntry = last(day.entries);
+        const draftPrevEntry = last(draftDay.entries);
 
-        if (prevEntry) {
-            if (prevEntry.end) {
-                entry = {...entry, start: prevEntry.end};
+        if (draftPrevEntry) {
+            if (draftPrevEntry.end) {
+                entry = {...entry, start: draftPrevEntry.end};
             } else {
-                prevEntry.end = entry.start;
+                // Stop previous entry
+                draftPrevEntry.end = entry.start;
             }
         }
 
-        day.entries.push(entry);
+        draftDay.entries.push(entry);
 
         return draftState;
     },
