@@ -25,7 +25,11 @@ const Day = (props: {date: EntryDate}) => (
         hei 9
         <EntriesConnect
             date={props.date}
-            render={data => data.entryIDs.map(id => <Entry key={id} id={id} />)}
+            render={data =>
+                data.entryIDs.map(id => (
+                    <Entry key={id} day={props.date} id={id} />
+                ))
+            }
         />
         <AddEntry date={props.date} />
     </Container>

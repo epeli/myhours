@@ -17,6 +17,20 @@ function foo(options: {year: string; week: string}) {
 const Main = () => (
     <Switch>
         <Route
+            path="/day/:year/:month/:day"
+            render={route => (
+                <Day
+                    date={createEntryDate(
+                        new Date(
+                            `${route.match.params.year}-${
+                                route.match.params.month
+                            }-${route.match.params.day}`,
+                        ),
+                    )}
+                />
+            )}
+        />
+        <Route
             path="/week/:year/:week"
             render={route => (
                 <Week

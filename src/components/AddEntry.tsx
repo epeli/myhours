@@ -71,11 +71,13 @@ class AddEntry extends React.Component<{date: EntryDate}, typeof initialState> {
                             return;
                         }
                         actions.addEntry({
-                            id: generateEntryId(),
-                            date: this.props.date,
-                            projectID: this.state.project.id,
-                            comment: this.state.comment,
-                            duration: this.state.duration,
+                            day: this.props.date,
+                            entry: {
+                                id: generateEntryId(),
+                                projectID: this.state.project.id,
+                                comment: this.state.comment,
+                                duration: this.state.duration,
+                            },
                         });
                     }}
                 >

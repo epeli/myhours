@@ -3,16 +3,17 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
 
-import {EntryID} from "../redux/state";
+import {EntryDate, EntryID} from "../redux/state";
 import {createMyHoursComponent} from "../redux/store";
 
 const EntryConnect = createMyHoursComponent({
-    mapState: (selectors, props: {id: EntryID}) =>
-        selectors.getEntry(props.id) || null,
+    mapState: (selectors, props: {day: EntryDate; id: EntryID}) =>
+        selectors.getEntry(props.day, props.id) || null,
 });
 
-const Entry = (props: {id: EntryID}) => (
+const Entry = (props: {day: EntryDate; id: EntryID}) => (
     <EntryConnect
+        day={props.day}
         id={props.id}
         render={entry =>
             entry ? (

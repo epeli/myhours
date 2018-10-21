@@ -26,11 +26,16 @@ export interface Project {
 
 export interface Entry {
     id: EntryID;
-    date: EntryDate;
     projectID: ProjectID;
     comment: string;
     duration?: number;
     interval?: {start: number; end: number};
+}
+
+export interface Day {
+    id: EntryDate;
+    daySaves: boolean;
+    entries: Entry[];
 }
 
 export interface State {
@@ -38,8 +43,8 @@ export interface State {
         [projectId: string]: Project | undefined;
     };
 
-    entries: {
-        [entryId: string]: Entry | undefined;
+    days: {
+        [day: string]: Day | undefined;
     };
 }
 
@@ -47,27 +52,32 @@ export const initialState: State = {
     projects: {
         foo: {
             id: "foo" as ProjectID,
-            name: "Foo",
+            name: "Project Foo",
         },
         bar: {
             id: "bar" as ProjectID,
-            name: "Bar",
+            name: "Project Bar",
         },
     },
-    entries: {
-        boo: {
-            id: "boo" as EntryID,
-            date: createEntryDate(new Date()),
-            projectID: "bar" as ProjectID,
-            comment: "testi",
-            duration: 2.4,
-        },
-        bar: {
-            id: "bar" as EntryID,
-            date: createEntryDate(new Date()),
-            projectID: "bar" as ProjectID,
-            comment: "bar juttu",
-            duration: 2.4,
+
+    days: {
+        [createEntryDate(new Date("2018-10-21"))]: {
+            id: createEntryDate(new Date("2018-10-21")),
+            daySaves: false,
+            entries: [
+                {
+                    id: "boo" as EntryID,
+                    projectID: "bar" as ProjectID,
+                    comment: "testi",
+                    duration: 2.4,
+                },
+                {
+                    id: "bar" as EntryID,
+                    projectID: "bar" as ProjectID,
+                    comment: "bar juttu",
+                    duration: 2.4,
+                },
+            ],
         },
     },
 };
@@ -83,14 +93,22 @@ export class Selectors {
         return this.getEntries(date).map(entry => entry.id);
     }
 
-    getEntry(id: EntryID) {
-        return this.state.entries[id];
+    getEntry(date: EntryDate, id: EntryID): Entry | undefined {
+        const day = this.state.days[date];
+        if (!day) {
+            return;
+        }
+
+        return day.entries.find(entry => entry.id == id);
     }
 
     getEntries(date: EntryDate): Entry[] {
-        return values(this.state.entries)
-            .filter(notEmpty)
-            .filter(entry => entry.date === date);
+        const day = this.state.days[date];
+        if (!day) {
+            return [];
+        }
+
+        return day.entries;
     }
 
     getProjects() {
