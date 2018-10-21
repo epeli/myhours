@@ -5,20 +5,6 @@ import Downshift, {DownshiftInterface} from "downshift";
 import matchSorter from "match-sorter";
 import React from "react";
 
-function renderInput(inputProps: any) {
-    const {InputProps, ref, ...other} = inputProps;
-
-    return (
-        <TextField
-            InputProps={{
-                inputRef: ref,
-                ...InputProps,
-            }}
-            {...other}
-        />
-    );
-}
-
 function renderSuggestion({
     suggestion,
     index,
@@ -86,14 +72,15 @@ function SelectItem<T extends Item>(props: Props<T>) {
             >
                 {ds => (
                     <div>
-                        {renderInput({
-                            fullWidth: true,
-                            InputProps: ds.getInputProps({
+                        <TextField
+                            fullWidth
+                            InputProps={ds.getInputProps({
                                 placeholder: "Select project",
-                            }),
-                        })}
+                            })}
+                        />
+
                         <div {...ds.getMenuProps()}>
-                            {ds.isOpen ? (
+                            {ds.isOpen && (
                                 <Paper square>
                                     {getSuggestions(
                                         props.items,
@@ -111,7 +98,7 @@ function SelectItem<T extends Item>(props: Props<T>) {
                                         }),
                                     )}
                                 </Paper>
-                            ) : null}
+                            )}
                         </div>
                     </div>
                 )}
