@@ -14,5 +14,9 @@ export function generateEntryId(): EntryID {
 }
 
 export function createProjectId(name: string): ProjectID {
-    return deburr(name) as ProjectID;
+    const id = deburr(name)
+        .trim()
+        .replace(/[^a-z]+/g, "-");
+
+    return id as ProjectID;
 }
