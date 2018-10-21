@@ -78,19 +78,19 @@ export const SimpleActions = createSimpleActions(initialState, {
     setEntryEnd(
         draftState,
         action: {
-            day: DayID;
+            dayID: DayID;
             entryID: EntryID;
             end: number;
         },
     ) {
-        const day = draftState.days[action.day];
+        const draftDay = draftState.days[action.dayID];
 
-        if (!day) {
-            console.warn("Unknown day: " + action.day);
+        if (!draftDay) {
+            console.warn("Unknown day: " + action.dayID);
             return draftState;
         }
 
-        const entryIndex = day.entries.findIndex(
+        const entryIndex = draftDay.entries.findIndex(
             _entry => _entry.id === action.entryID,
         );
 
@@ -98,28 +98,70 @@ export const SimpleActions = createSimpleActions(initialState, {
             return draftState;
         }
 
-        const entry = day.entries[entryIndex];
-        const previous: Entry | undefined = day.entries[entryIndex - 1];
-        const next: Entry | undefined = day.entries[entryIndex + 1];
+        const draftEntry = draftDay.entries[entryIndex];
+        const previous: Entry | undefined = draftDay.entries[entryIndex - 1];
+        const next: Entry | undefined = draftDay.entries[entryIndex + 1];
         let end = action.end;
+
+        if (draftEntry.start >= end) {
+            return;
+        }
 
         if (next && !next.end) {
             end = Date.now();
         }
 
-        const change = action.end - (entry.end || end);
+        const change = action.end - (draftEntry.end || end);
 
-        entry.end = end;
+        draftEntry.end = end;
 
         if (Math.abs(change) > 0) {
-            for (const index of range(entryIndex + 1, day.entries.length)) {
-                const entryAfter = day.entries[index];
+            for (const index of range(
+                entryIndex + 1,
+                draftDay.entries.length,
+            )) {
+                const entryAfter = draftDay.entries[index];
                 entryAfter.start += change;
                 if (entryAfter.end) {
                     entryAfter.end += change;
                 }
             }
         }
+
+        return draftState;
+    },
+
+    setEntryStart(
+        draftState,
+        action: {
+            dayID: DayID;
+            entryID: EntryID;
+            start: number;
+        },
+    ) {
+        const draftDay = draftState.days[action.dayID];
+
+        if (!draftDay) {
+            console.warn("Unknown day: " + action.dayID);
+            return draftState;
+        }
+
+        const entryIndex = draftDay.entries.findIndex(
+            _entry => _entry.id === action.entryID,
+        );
+
+        if (entryIndex === -1) {
+            return draftState;
+        }
+
+        const draftEntry = draftDay.entries[entryIndex];
+        const previous: Entry | undefined = draftDay.entries[entryIndex - 1];
+
+        if (previous && previous.end && previous.end > action.start) {
+            return draftState;
+        }
+
+        draftEntry.start = action.start;
 
         return draftState;
     },

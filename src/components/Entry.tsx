@@ -1,6 +1,7 @@
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import Paper from "@material-ui/core/Paper";
+import TextField from "@material-ui/core/TextField";
 import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -15,7 +16,7 @@ import {MappedActions} from "redux-render-prop";
 import {createMyHoursConnect} from "../redux/create-connect";
 import {DayID, Entry, EntryID, ProjectID} from "../redux/state";
 
-import {View} from "./core";
+import {Row, View} from "./core";
 
 const EntryConnect = createMyHoursConnect({
     mapState: (selectors, props: {day: DayID; id: EntryID}) => {
@@ -26,7 +27,12 @@ const EntryConnect = createMyHoursConnect({
         };
     },
     mapActions: (actions, props) => ({
-        setEntryEnd: actions.setEntryEnd,
+        setEntryStart(start: number) {
+            actions.setEntryStart({dayID: props.day, entryID: props.id, start});
+        },
+        setEntryEnd(end: number) {
+            actions.setEntryEnd({dayID: props.day, entryID: props.id, end});
+        },
         deleteEntry() {
             actions.deleteEntry({
                 dayID: props.day,
@@ -46,7 +52,18 @@ const Container = styled(View.withComponent(Paper))({
     margin: rem(16),
 });
 
-const ActionsContainer = styled(View)({
+const TitleContainer = styled(View)({
+    flexDirection: "row",
+    alignItems: "center",
+});
+
+const TimeRow = styled(View)({
+    flexDirection: "row",
+    alignItems: "center",
+});
+
+const SliderContainer = styled(View)({
+    padding: rem(16),
     alignItems: "center",
     flexDirection: "row",
 });
@@ -67,12 +84,9 @@ const ButtonContainer = styled(View)({
 const Duration = (props: {duration: number}) => {
     const minutes = props.duration / 1000 / 60;
     return (
-        <DurationContainer>
-            <Typography variant="caption">
-                {Math.floor(minutes / 60)} hours {Math.round(minutes % 60)}{" "}
-                minutes
-            </Typography>
-        </DurationContainer>
+        <span>
+            {Math.floor(minutes / 60)} hours {Math.round(minutes % 60)} minutes
+        </span>
     );
 };
 
@@ -80,6 +94,7 @@ interface Props {
     day: DayID;
     entry: Entry;
     isNextRunning: boolean;
+    setEntryStart: MappedActions<typeof EntryConnect>["setEntryStart"];
     setEntryEnd: MappedActions<typeof EntryConnect>["setEntryEnd"];
     deleteEntry: () => void;
 }
@@ -104,21 +119,15 @@ class EntryClass extends React.Component<Props, State> {
             return;
         }
 
-        this.props.setEntryEnd({
-            day: this.props.day,
-            entryID: this.props.entry.id,
-            end: this.props.entry.start + this.state.sliderValue * 60 * 1000,
-        });
+        this.props.setEntryEnd(
+            this.props.entry.start + this.state.sliderValue * 60 * 1000,
+        );
 
         this.setState({sliderValue: null});
     }, 500);
 
     handleStop = () => {
-        this.props.setEntryEnd({
-            day: this.props.day,
-            entryID: this.props.entry.id,
-            end: Date.now(),
-        });
+        this.props.setEntryEnd(Date.now());
     };
 
     getDuration(): number {
@@ -174,30 +183,66 @@ class EntryClass extends React.Component<Props, State> {
                         </IconButton>
                     </Tooltip>
                 </ButtonContainer>
-                <Typography variant="h5" component="h2">
-                    <ProjectConnect
-                        id={entry.projectID}
-                        render={data => (
-                            <span>
-                                {data.name}{" "}
-                                {datefns.format(entry.start, "HH:mm")}
+                <ProjectConnect
+                    id={entry.projectID}
+                    render={data => (
+                        <TitleContainer>
+                            <Typography variant="h5">{data.name} </Typography>
+                            <View style={{width: rem(16)}} />
+                            <Typography variant="body2">
+                                <Duration duration={this.getDuration()} />
+                            </Typography>
+                            {/* {datefns.format(entry.start, "HH:mm")}
                                 {" - "}
                                 {entry.end
                                     ? datefns.format(
                                           entry.start + this.getDuration(),
                                           "HH:mm",
                                       )
-                                    : "now..."}
-                            </span>
-                        )}
-                    />
-                </Typography>
-                <ActionsContainer>
-                    <Duration duration={this.getDuration()} />
+                                    : "now..."} */}
+                        </TitleContainer>
+                    )}
+                />
+                <SliderContainer>
                     {this.props.entry.end
                         ? this.renderSlider()
                         : this.renderStopButton()}
-                </ActionsContainer>
+                </SliderContainer>
+
+                <TimeRow>
+                    <TextField
+                        type="time"
+                        required
+                        onChange={e => {
+                            const parsed = datefns.parse(
+                                e.target.value,
+                                "HH:mm",
+                                new Date(this.props.day),
+                            );
+                            this.props.setEntryStart(parsed.getTime());
+                        }}
+                        value={datefns.format(entry.start, "HH:mm")}
+                    />
+                    <Typography variant="body2">{" to "}</Typography>
+                    {entry.end ? (
+                        <TextField
+                            type="time"
+                            required
+                            value={datefns.format(entry.end, "HH:mm")}
+                            onChange={e => {
+                                const parsed = datefns.parse(
+                                    e.target.value,
+                                    "HH:mm",
+                                    new Date(this.props.day),
+                                );
+                                this.props.setEntryEnd(parsed.getTime());
+                            }}
+                        />
+                    ) : (
+                        "NOW"
+                    )}
+                </TimeRow>
+
                 <Typography component="p">{entry.comment}</Typography>
             </Container>
         );
@@ -216,6 +261,7 @@ const EntryWrap = (props: {day: DayID; id: EntryID}) => (
                     deleteEntry={actions.deleteEntry}
                     isNextRunning={data.isNextRunning}
                     setEntryEnd={actions.setEntryEnd}
+                    setEntryStart={actions.setEntryStart}
                 />
             ) : (
                 "not found: " + props.id

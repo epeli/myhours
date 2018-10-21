@@ -1,6 +1,6 @@
 import styled from "react-emotion";
 
-export const View = styled("div")({
+export const View = styled.div({
     display: "flex",
     position: "relative",
     boxSizing: "border-box",
