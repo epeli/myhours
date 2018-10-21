@@ -5,38 +5,32 @@ import Downshift, {DownshiftInterface} from "downshift";
 import matchSorter from "match-sorter";
 import React from "react";
 
-function renderSuggestion({
-    suggestion,
+function renderItem({
+    item,
     index,
     itemProps,
     highlightedIndex,
-    selectedItem,
 }: {
-    suggestion: {label: string};
+    item: Item;
     index: number;
     itemProps: any;
     highlightedIndex: number | null;
-    selectedItem: any;
 }) {
     const isHighlighted = highlightedIndex === index;
-    const isSelected = (selectedItem || "").indexOf(suggestion.label) > -1;
 
     return (
         <MenuItem
             {...itemProps}
-            key={suggestion.label}
+            key={item.label}
             selected={isHighlighted}
             component="div"
-            style={{
-                fontWeight: isSelected ? 500 : 400,
-            }}
         >
-            {suggestion.label}
+            {item.label}
         </MenuItem>
     );
 }
 
-function getSuggestions(suggestions: Item[], value: string) {
+function filterItems(suggestions: Item[], value: string) {
     return matchSorter(suggestions, value, {keys: ["label"]}).slice(0, 10);
 }
 
@@ -82,19 +76,18 @@ function SelectItem<T extends Item>(props: Props<T>) {
                         <div {...ds.getMenuProps()}>
                             {ds.isOpen && (
                                 <Paper square>
-                                    {getSuggestions(
+                                    {filterItems(
                                         props.items,
                                         ds.inputValue || "",
-                                    ).map((suggestion, index) =>
-                                        renderSuggestion({
-                                            suggestion,
+                                    ).map((item, index) =>
+                                        renderItem({
+                                            item,
                                             index,
                                             itemProps: ds.getItemProps({
-                                                item: suggestion,
+                                                item: item,
                                             }),
                                             highlightedIndex:
                                                 ds.highlightedIndex,
-                                            selectedItem: ds.selectedItem,
                                         }),
                                     )}
                                 </Paper>
