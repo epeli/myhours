@@ -14,11 +14,15 @@ export const SimpleActions = createSimpleActions(initialState, {
 
     addEntry(draftState, action: {day: DayID; entry: Entry}) {
         let entry = action.entry;
-        const draftDay = draftState.days[action.day];
+        let draftDay = draftState.days[action.day];
 
         if (!draftDay) {
-            console.warn("Unknown day: " + action.day);
-            return draftState;
+            draftDay = {
+                id: action.day,
+                daySaves: false,
+                entries: [],
+            };
+            draftState.days[draftDay.id] = draftDay;
         }
 
         const draftPrevEntry = last(draftDay.entries);
